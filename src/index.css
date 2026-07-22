@@ -13,7 +13,10 @@
   color-scheme: light;
 }
 
-/* ---------- Superficies base por tema ---------- */
+/* ---------- Superficies base + PALETA DE LAS 4 ESTACIONES por tema ----------
+   Se definen las cuatro estaciones a la vez (invierno=inv, primavera=pri,
+   verano=ver, otoño=oto) para que el calendario pueda pintar cada día con su
+   bioma. La estación ACTIVA (--season*) referencia estas variables más abajo. */
 [data-theme='light'] {
   --surface: 250 249 246;
   --surface-2: 255 255 255;
@@ -22,6 +25,11 @@
   --line: 226 223 216;
   /* Texto sobre un fondo de color de estación (tema claro -> claro sobre mid-tone). */
   --on-season: 255 255 255;
+
+  --inv: 79 91 146;   --inv-soft: 224 227 240;  --inv-ink: 47 55 96;
+  --pri: 63 143 92;   --pri-soft: 219 240 224;  --pri-ink: 34 84 55;
+  --ver: 214 126 54;  --ver-soft: 250 231 210;  --ver-ink: 150 79 26;
+  --oto: 176 92 71;   --oto-soft: 242 224 214;  --oto-ink: 122 58 42;
   color-scheme: light;
 }
 
@@ -33,55 +41,26 @@
   --line: 42 46 55;
   /* En oscuro la estación es un tono claro -> texto oscuro encima. */
   --on-season: 15 17 21;
+
+  --inv: 138 150 208;  --inv-soft: 34 40 66;   --inv-ink: 197 205 240;
+  --pri: 106 197 137;  --pri-soft: 26 52 38;   --pri-ink: 176 232 195;
+  --ver: 240 165 96;   --ver-soft: 61 41 22;   --ver-ink: 248 210 172;
+  --oto: 214 137 112;  --oto-soft: 54 34 27;   --oto-ink: 240 200 182;
   color-scheme: dark;
 }
 
-/* ---------- Invierno / La Cueva (menstrual) ---------- */
-[data-season='invierno'][data-theme='light'] {
-  --season: 79 91 146;
-  --season-soft: 224 227 240;
-  --season-ink: 47 55 96;
+/* ---------- La estación ACTIVA referencia la paleta (ya conmutada por tema) --- */
+[data-season='invierno'] {
+  --season: var(--inv); --season-soft: var(--inv-soft); --season-ink: var(--inv-ink);
 }
-[data-season='invierno'][data-theme='dark'] {
-  --season: 138 150 208;
-  --season-soft: 34 40 66;
-  --season-ink: 197 205 240;
+[data-season='primavera'] {
+  --season: var(--pri); --season-soft: var(--pri-soft); --season-ink: var(--pri-ink);
 }
-
-/* ---------- Primavera / El Brote (folicular) ---------- */
-[data-season='primavera'][data-theme='light'] {
-  --season: 63 143 92;
-  --season-soft: 219 240 224;
-  --season-ink: 34 84 55;
+[data-season='verano'] {
+  --season: var(--ver); --season-soft: var(--ver-soft); --season-ink: var(--ver-ink);
 }
-[data-season='primavera'][data-theme='dark'] {
-  --season: 106 197 137;
-  --season-soft: 26 52 38;
-  --season-ink: 176 232 195;
-}
-
-/* ---------- Verano / La Cumbre (ovulatoria) ---------- */
-[data-season='verano'][data-theme='light'] {
-  --season: 214 126 54;
-  --season-soft: 250 231 210;
-  --season-ink: 150 79 26;
-}
-[data-season='verano'][data-theme='dark'] {
-  --season: 240 165 96;
-  --season-soft: 61 41 22;
-  --season-ink: 248 210 172;
-}
-
-/* ---------- Otoño / El Refugio (lútea) ---------- */
-[data-season='otono'][data-theme='light'] {
-  --season: 176 92 71;
-  --season-soft: 242 224 214;
-  --season-ink: 122 58 42;
-}
-[data-season='otono'][data-theme='dark'] {
-  --season: 214 137 112;
-  --season-soft: 54 34 27;
-  --season-ink: 240 200 182;
+[data-season='otono'] {
+  --season: var(--oto); --season-soft: var(--oto-soft); --season-ink: var(--oto-ink);
 }
 
 * {

@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { readSettings, seedIfNeeded } from '../db/repositories'
 import { ThemeSync } from './ThemeSync'
+import { SeasonController } from './SeasonController'
 import { AppLayout } from './AppLayout'
 import { Onboarding } from '../features/onboarding/Onboarding'
 import { TodayScreen } from '../features/today/TodayScreen'
@@ -28,6 +29,7 @@ export function App() {
         <Onboarding onDone={() => { /* reactivo vía useLiveQuery */ }} />
       ) : (
         <BrowserRouter>
+          <SeasonController />
           <Routes>
             <Route element={<AppLayout />}>
               <Route path="/" element={<TodayScreen />} />

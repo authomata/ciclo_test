@@ -1,70 +1,56 @@
 import { PageHeader } from '../../ui/PageHeader'
 import { Card } from '../../ui/Card'
 import { Disclaimer } from '../../ui/Disclaimer'
-import { ALL_SEASONS, SEASON_META } from '../../domain/season'
-import { useUIStore } from '../../stores/uiStore'
+import { SeasonHero } from './SeasonHero'
+import { DayLogEditor } from '../daily-log/DayLogEditor'
+import { useCycle } from '../../hooks/useCycle'
 import { longDate, todayISO } from '../../lib/date'
 
-// Fase 1: pantalla base. El registro diario y el cálculo real de fase
-// llegan en la Fase 2. Aquí mostramos la estación activa (por ahora
-// seleccionable a mano) para dejar visible el sistema de biomas.
 export function TodayScreen() {
-  const active = useUIStore((s) => s.activeSeason)
-  const setSeason = useUIStore((s) => s.setActiveSeason)
-  const meta = SEASON_META[active]
+  const { loading, hasData, today, prediction } = useCycle()
+  const date = todayISO()
 
   return (
     <div>
-      <PageHeader title="Hoy" subtitle={longDate(todayISO())} />
+      <PageHeader title="Hoy" subtitle={longDate(date)} />
 
-      <Card className="mb-4 bg-season-soft">
-        <div className="flex items-start gap-3">
-          <span aria-hidden className="text-4xl">
-            {meta.emoji}
-          </span>
-          <div>
-            <p className="text-sm font-medium uppercase tracking-wide text-season">
-              {meta.title} · {meta.place}
-            </p>
-            <p className="mt-1 leading-relaxed text-season-ink">{meta.blurb}</p>
+      {loading ? (
+        <p className="text-content-soft">Cargando…</p>
+      ) : (
+        <>
+          {hasData ? (
+            <>
+              <SeasonHero info={today} />
+              {prediction.nextPeriodStart && (
+                <p className="mb-6 px-1 text-sm text-content-soft">
+                  Próxima menstruación estimada:{' '}
+                  <span className="font-medium text-content">
+                    {longDate(prediction.nextPeriodStart)}
+                  </span>
+                  {prediction.stats.completedCycles > 0 && (
+                    <> · {prediction.stats.completedCycles} ciclo(s) registrado(s)</>
+                  )}
+                </p>
+              )}
+            </>
+          ) : (
+            <Card className="mb-6 bg-season-soft">
+              <p className="font-medium text-season-ink">Empieza a revelar tu mapa</p>
+              <p className="mt-1 text-sm leading-relaxed text-season-ink/80">
+                Marca abajo el <span className="font-medium">primer día de tu
+                menstruación</span> y Ciclo empezará a dibujar tus estaciones. Al principio
+                será borroso; con cada registro se irá aclarando.
+              </p>
+            </Card>
+          )}
+
+          <DayLogEditor date={date} />
+
+          <div className="mt-8">
+            <Disclaimer />
           </div>
-        </div>
-      </Card>
-
-      <section aria-label="Vista previa de las cuatro estaciones" className="mb-6">
-        <p className="mb-2 text-xs uppercase tracking-wide text-content-soft">
-          Vista previa — el cálculo real de tu fase llega pronto
-        </p>
-        <div className="grid grid-cols-4 gap-2">
-          {ALL_SEASONS.map((s) => (
-            <button
-              key={s.season}
-              onClick={() => setSeason(s.season)}
-              aria-pressed={s.season === active}
-              className={`flex flex-col items-center gap-1 rounded-xl2 border p-2 text-center transition ${
-                s.season === active
-                  ? 'border-season ring-1 ring-season'
-                  : 'border-line hover:border-content-soft'
-              }`}
-            >
-              <span aria-hidden className="text-xl">
-                {s.emoji}
-              </span>
-              <span className="text-[11px] leading-tight text-content-soft">{s.place}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <Card className="mb-4">
-        <p className="text-sm text-content-soft">
-          Aquí vivirá tu <span className="font-medium text-content">registro de hoy</span>:
-          flujo, síntomas, ánimo, energía, sueño y notas. Cada registro revelará un poco más
-          el mapa de tu cuerpo.
-        </p>
-      </Card>
-
-      <Disclaimer />
+        </>
+      )}
     </div>
   )
 }
