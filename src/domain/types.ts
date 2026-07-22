@@ -21,6 +21,8 @@ export interface DayLog {
   energy?: number
   sleepHours?: number
   notes?: string
+  /** ids de misiones completadas ese día (Fase 3). */
+  missionsDone?: string[]
   createdAt: number
   updatedAt: number
 }
