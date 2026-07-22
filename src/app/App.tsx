@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { readSettings, seedIfNeeded } from '../db/repositories'
@@ -10,6 +10,12 @@ import { TodayScreen } from '../features/today/TodayScreen'
 import { CalendarScreen } from '../features/calendar/CalendarScreen'
 import { SkyScreen } from '../features/sky/SkyScreen'
 import { SettingsScreen } from '../features/settings/SettingsScreen'
+
+// Patrones carga Recharts (pesado): se separa en su propio chunk y se pide
+// solo al entrar a la pestaña, para no lastrar el arranque de la app.
+const PatternsScreen = lazy(() =>
+  import('../features/patterns/PatternsScreen').then((m) => ({ default: m.PatternsScreen })),
+)
 
 export function App() {
   // Siembra los singletons una sola vez (fuera del liveQuery, que es solo lectura).
@@ -34,6 +40,14 @@ export function App() {
             <Route element={<AppLayout />}>
               <Route path="/" element={<TodayScreen />} />
               <Route path="/calendario" element={<CalendarScreen />} />
+              <Route
+                path="/patrones"
+                element={
+                  <Suspense fallback={<Splash />}>
+                    <PatternsScreen />
+                  </Suspense>
+                }
+              />
               <Route path="/cielo" element={<SkyScreen />} />
               <Route path="/ajustes" element={<SettingsScreen />} />
               <Route path="*" element={<TodayScreen />} />

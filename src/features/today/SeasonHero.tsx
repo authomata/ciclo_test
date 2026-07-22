@@ -10,12 +10,20 @@ export function SeasonHero({ info }: { info: CycleInfo }) {
 
   return (
     <Card className="mb-4 overflow-hidden bg-season-soft">
-      <div className="flex items-start gap-3">
+      {/* Crossfade suave al cambiar de estación; el estado inicial es visible
+          (opacity 0.55) para no quedar en blanco si la animación no corre. */}
+      <motion.div
+        key={info.season}
+        className="flex items-start gap-3"
+        initial={{ opacity: 0.55, y: 4 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <motion.span
           aria-hidden
           className="text-4xl"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 200, damping: 18 }}
         >
           {meta.emoji}
@@ -36,7 +44,7 @@ export function SeasonHero({ info }: { info: CycleInfo }) {
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </Card>
   )
 }

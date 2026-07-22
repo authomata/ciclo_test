@@ -9,6 +9,7 @@ interface Tab {
 const TABS: Tab[] = [
   { to: '/', label: 'Hoy', icon: '🌗' },
   { to: '/calendario', label: 'Calendario', icon: '🗓️' },
+  { to: '/patrones', label: 'Patrones', icon: '📈' },
   { to: '/cielo', label: 'Cielo', icon: '✨' },
   { to: '/ajustes', label: 'Ajustes', icon: '⚙️' },
 ]
